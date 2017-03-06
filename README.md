@@ -1,2 +1,2 @@
-# minor-funda
-Project for Funda
+# Project Funda
+Project for Funda during Web-Dev minor

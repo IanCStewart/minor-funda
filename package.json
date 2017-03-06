@@ -1,0 +1,21 @@
+{
+  "name": "minor-funda",
+  "version": "1.0.0",
+  "description": "Project for Funda",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IanCStewart/minor-funda.git"
+  },
+  "keywords": [],
+  "author": "Ian Stewart",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IanCStewart/minor-funda/issues"
+  },
+  "homepage": "https://github.com/IanCStewart/minor-funda#readme",
+  "devDependencies": {
+    "eslint": "^3.15.0"
+  },
+  "dependencies": {}
+}

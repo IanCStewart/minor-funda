@@ -1,0 +1,13 @@
+:root {
+  --color-orange: #F7A100;
+  --color-light-blue: #E6F2F7;
+  --color-blue: #0071B3;
+  --color-white: #FFFFFF;
+  --color-grey: #999999;
+  --color-black: #333333;
+}
+
+html {
+  font-size: 62.5%;
+  font-family: "proxima-nova";
+}

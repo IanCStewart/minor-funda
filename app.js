@@ -1,4 +1,4 @@
-/*global window, document, config, localStorage, fetch, navigator*/
+/*global window, document, config, fetch, navigator*/
 (function(){
   'use strict';
 

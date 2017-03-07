@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Project for Funda",
   "main": "app.js",
+  "scripts": {
+    "start": "browser-sync start -s --https -b 'google chrome' --no-ui -f './'"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/IanCStewart/minor-funda.git"
@@ -17,5 +20,7 @@
   "devDependencies": {
     "eslint": "^3.15.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "browser-sync": "^2.18.8"
+  }
 }

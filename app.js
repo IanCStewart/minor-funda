@@ -1,8 +1,9 @@
+/*global window, document, config, localStorage, fetch*/
 (function(){
   'use strict';
 
   const appSettings = {
-    url(param) { return ` http://funda.kyrandia.nl/feeds/Aanbod.svc/json/${config.API_KEY}/${param}`},
+    url(param) {return ` http://funda.kyrandia.nl/feeds/Aanbod.svc/json/${config.API_KEY}/${param}`;},
     main: document.querySelector('main'),
     html: ''
   };
@@ -11,14 +12,14 @@
     init() {
       routes.listen();
     }
-  }
+  };
 
   const routes = {
     listen() {
       store.hydrate('?type=koop&zo=/amsterdam/tuin/&page=1&pagesize=25');
       window.addEventListener('hashchange', () => section.toggle(window.location.hash), false);
     }
-  }
+  };
 
   const section = {
     toggle(route) {
@@ -37,7 +38,7 @@
     error() {
       appSettings.main.innerHTML = 'connection error';
     }
-  }
+  };
 
   const store = {
     hydrate(param) {
@@ -53,7 +54,7 @@
       localStorage.setItem('funda', JSON.stringify(data));
       section.log();
     }
-  }
+  };
 
   const request = {
     data(param) {
@@ -62,7 +63,7 @@
       .then(d => store.data(d))
       .catch(section.error());
     }
-  }
+  };
 
   app.init();
 })();

@@ -32,11 +32,11 @@
       });
     },
     renderLocationObjects(data) {
-      console.log(data.Objects);
       let html = '';
       appSettings.error.innerHTML = '';
       appSettings.error.classList.add('invisible');
-      data.Objects.forEach(object => {
+      data.Objects.length > 0
+      ? data.Objects.forEach(object => {
         html = `
           <section>
             <h1>${object.Adres}</h1>
@@ -46,6 +46,9 @@
         `;
         appSettings.chat.innerHTML += html;
       })
+      : appSettings.chat.innerHTML += `
+        <p>Theres no houses in this area "${data.Metadata.Omschrijving}"</p>
+      `;
     },
     error(error) {
       let html = error ? error : 'seems like something went wrong';

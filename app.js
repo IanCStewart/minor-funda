@@ -39,103 +39,103 @@
 
       switch (this.questionCount) {
         case 0:
-          html = chat.questions[chat.questionCount];
-          chat.questionCount = chat.questionCount + 1;
-          chat.userChoices.type = '';
-          chat.userChoices.options = [];
+          html = this.questions[this.questionCount];
+          this.questionCount = this.questionCount + 1;
+          this.userChoices.type = '';
+          this.userChoices.options = [];
           section.renderChatMessage(html, 'fundapi');
           break;
         case 1:
           if(response.toLowerCase() === 'koop' || response.toLowerCase() === 'huur') {
-            html = chat.questions[chat.questionCount];
-            chat.questionCount = chat.questionCount + 1;
-            chat.userChoices.type = response.toLowerCase();
+            html = this.questions[this.questionCount];
+            this.questionCount = this.questionCount + 1;
+            this.userChoices.type = response.toLowerCase();
             section.renderChatMessage(html, 'fundapi');
           } else {
-            html = chat.awnsers[chat.questionCount - 1];
+            html = this.awnsers[this.questionCount - 1];
             section.renderChatMessage(html, 'fundapi');
           }
           break;
         case 2:
           if(response.toLowerCase() === 'woonhuis' || response.toLowerCase() === 'appartement') {
-            html = chat.questions[chat.questionCount];
-            chat.questionCount = chat.questionCount + 1;
-            chat.userChoices.options.push(response.toLowerCase());
+            html = this.questions[this.questionCount];
+            this.questionCount = this.questionCount + 1;
+            this.userChoices.options.push(response.toLowerCase());
             section.renderChatMessage(html, 'fundapi');
           } else if(response.toLowerCase() === 'maakt niet uit') {
-            html = chat.questions[chat.questionCount];
-            chat.questionCount = chat.questionCount + 1;
+            html = this.questions[this.questionCount];
+            this.questionCount = this.questionCount + 1;
             section.renderChatMessage(html, 'fundapi');
           } else {
-            html = chat.awnsers[chat.questionCount - 1];
+            html = this.awnsers[this.questionCount - 1];
             section.renderChatMessage(html, 'fundapi');
           }
           break;
         case 3:
           if(response.toLowerCase() === 'balkon' || response.toLowerCase() === 'dakterras' || response.toLowerCase() === 'tuin') {
-            html = chat.questions[chat.questionCount];
-            chat.questionCount = chat.questionCount + 1;
-            chat.userChoices.options.push(response.toLowerCase());
+            html = this.questions[this.questionCount];
+            this.questionCount = this.questionCount + 1;
+            this.userChoices.options.push(response.toLowerCase());
             section.renderChatMessage(html, 'fundapi');
           } else if(response.toLowerCase() === 'maakt niet uit') {
-            html = chat.questions[chat.questionCount];
-            chat.questionCount = chat.questionCount + 1;
+            html = this.questions[this.questionCount];
+            this.questionCount = this.questionCount + 1;
             section.renderChatMessage(html, 'fundapi');
           } else {
-            html = chat.awnsers[chat.questionCount - 1];
+            html = this.awnsers[this.questionCount - 1];
             section.renderChatMessage(html, 'fundapi');
           }
           break;
         case 4:
           if(response.toLowerCase() === 'nieuwbouw' || response.toLowerCase() === 'bestaande bouw') {
-            html = chat.questions[chat.questionCount];
-            chat.questionCount = chat.questionCount + 1;
-            chat.userChoices.options.push(response.toLowerCase());
+            html = this.questions[this.questionCount];
+            this.questionCount = this.questionCount + 1;
+            this.userChoices.options.push(response.toLowerCase());
             section.renderChatMessage(html, 'fundapi');
             store.hydrate();
           } else if(response.toLowerCase() === 'maakt niet uit') {
-            html = chat.questions[chat.questionCount];
-            chat.questionCount = chat.questionCount + 1;
+            html = this.questions[this.questionCount];
+            this.questionCount = this.questionCount + 1;
             section.renderChatMessage(html, 'fundapi');
             store.hydrate();
           } else {
-            html = chat.awnsers[chat.questionCount - 1];
+            html = this.awnsers[this.questionCount - 1];
             section.renderChatMessage(html, 'fundapi');
           }
           break;
         case 6:
           if(response.toLowerCase() === 'ja') {
-            html = chat.questions[0];
-            chat.questionCount = 1;
-            chat.userChoices = [];
-            chat.nextHouse = 0;
+            html = this.questions[0];
+            this.questionCount = 1;
+            this.userChoices = [];
+            this.nextHouse = 0;
             section.renderChatMessage(html, 'fundapi');
           } else if(response.toLowerCase() === 'nee') {
-            chat.hasNextHouse
+            this.hasNextHouse
             ? (
               html = 'Toch nog wel het volgende huis bekijken?',
-              chat.questionCount = chat.questionCount - 1
+              this.questionCount = this.questionCount - 1
             )
             : (
               html = 'Er zijn geen andere huizen. Wilt u het vorige huis opnieuw zien?',
-              chat.questionCount = chat.questionCount - 1
+              this.questionCount = this.questionCount - 1
             );
             section.renderChatMessage(html, 'fundapi');
           } else {
-            html = chat.awnsers[chat.questionCount - 2];
+            html = this.awnsers[this.questionCount - 2];
             section.renderChatMessage(html, 'fundapi');
           }
           break;
         default:
           if(response.toLowerCase() === 'ja') {
-            chat.nextHouse + 1;
-            section.renderLocationObjects(chat.nextHouse);
+            this.nextHouse + 1;
+            section.renderLocationObjects(this.nextHouse);
           } else if(response.toLowerCase() === 'nee') {
-            chat.questionCount = chat.questionCount + 1;
+            this.questionCount = this.questionCount + 1;
             html = 'Top als u een nieuwe zoek opdracht wilt doen stuur dan "ja"';
             section.renderChatMessage(html, 'fundapi');
           } else {
-            html = chat.awnsers[chat.questionCount - 1];
+            html = this.awnsers[this.questionCount - 1];
             section.renderChatMessage(html, 'fundapi');
           }
           break;

@@ -5,8 +5,7 @@
   const appSettings = {
     urlFundaSearch(type, address, options, page, size) {return `http://funda.kyrandia.nl/feeds/Aanbod.svc/json/${config.FUNDA_KEY}/?type=${type}&zo=/${address}/+0.001km${options}/&page=${page}&pagesize=${size}`;},
     urlGetAddress(lat, long) {return `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}&key=${config.GOOGLE_KEY}&result_type=street_address|locality`;},
-    chat: document.querySelector('#chat-body'),
-    error: document.querySelector('.error')
+    chat: document.querySelector('#chat-body')
   };
 
   const app = {
@@ -49,6 +48,8 @@
         case 0:
           html = chat.questions[chat.questionCount];
           chat.questionCount = chat.questionCount + 1;
+          chat.userChoices.type = '';
+          chat.userChoices.options = [];
           break;
         case 1:
           if(response.toLowerCase() === 'koop' || response.toLowerCase() === 'huur') {
@@ -150,14 +151,13 @@
     },
     renderLocationObjects(data) {
       let html = '';
-      appSettings.error.innerHTML = '';
-      appSettings.error.classList.add('invisible');
+      appSettings.chat.removeChild(document.querySelector('#loading'));
       data.Objects.length > 0
       ? data.Objects.forEach(object => {
         html = `
           <section>
             <h1>${object.Adres}</h1>
-            <img src="${object.FotoLargest}"/>
+            <img src="${object.FotoLarge}"/>
             ${object.HuurprijsFormaat ? object.PrijsGeformatteerdTextHuur : object.PrijsGeformatteerdTextKoop}
           </section>
         `;
@@ -168,20 +168,24 @@
       `;
       appSettings.chat.innerHTML += 'Wilt u opnieuw beginnen?';
     },
-    error(error) {
-      let html = error ? error : 'seems like something went wrong';
-      appSettings.error.innerHTML = `<section class="error">${html}<section>`;
+    loading() {
+      document.querySelector('#loading') === null
+      ? appSettings.chat.innerHTML += `
+        <section id="loading">
+          <div />
+        </section>`
+      : null;
     }
   };
 
   const location = {
     geo() {
       return new Promise(function(resolve, reject) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-          position
-          ? resolve({lat: position.coords.latitude, long: position.coords.longitude})
-          :reject();
-        });
+        navigator.geolocation.getCurrentPosition(
+          position => position ? resolve({lat: position.coords.latitude, long: position.coords.longitude}) : reject(),
+          error => reject(error),
+          { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+        );
       });
     },
     addres(lat, long) {
@@ -206,7 +210,7 @@
           chat.userChoices.options.forEach(option => options += `${option}/`);
           resolve(request.data(appSettings.urlFundaSearch(chat.userChoices.type, address.replace(/ /g, '-'), options, '1', '25')));
         } else if (address && !chat.userChoices.options.length > 0) {
-          resolve(request.data(appSettings.urlFundaSearch(chat.userChoices.type, address.replace(/ /g, '-'), '1', '25')));
+          resolve(request.data(appSettings.urlFundaSearch(chat.userChoices.type, address.replace(/ /g, '-'), '', '1', '25')));
         } else {
           reject();
         }
@@ -220,7 +224,7 @@
       .then(coords => location.addres(coords.lat, coords.long))
       .then(address => location.getObjects(address))
       .then(data => section.renderLocationObjects(data))
-      .catch(section.error('couldnt get location'));
+      .catch(section.loading());
     }
   };
 
@@ -230,7 +234,7 @@
         fetch(url)
         .then(d => d.json())
         .then(d => resolve(d))
-        .catch(section.error());
+        .catch(section.loading());
       });
     }
   };

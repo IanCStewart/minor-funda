@@ -173,6 +173,9 @@
         : document.querySelector(page).classList.add('invisible');
       });
     },
+    scrollDown() {
+      appSettings.chat.scrollTop = appSettings.chat.scrollHeight;
+    },
     renderChatMessage(html, user) {
       appSettings.chat.innerHTML += `
         <section class="message ${user}">
@@ -180,7 +183,7 @@
           <header><h1>${user}</h1></header>
           <p>${html}</p>
         </section>`;
-      appSettings.chat.scrollTop = appSettings.chat.scrollHeight;
+      section.scrollDown();
     },
     unrenderLoader() {
       appSettings.chat.removeChild(document.querySelector('#loading'));
@@ -193,7 +196,7 @@
             <div class="avatar"><img src="./assets/img/fundapi-avatar.svg" /></div>
             <header><h1>${data.Objects[dataNumber].Adres}</h1></header>
             <p>
-              <img src="${data.Objects[dataNumber].FotoLarge}"/>
+              <img class="house-img" src="${data.Objects[dataNumber].FotoLarge}"/>
               ${data.Objects[dataNumber].HuurprijsFormaat ? data.Objects[dataNumber].PrijsGeformatteerdTextHuur : data.Objects[dataNumber].PrijsGeformatteerdTextKoop}
             </p>
           </section>`
@@ -206,6 +209,7 @@
               Probeer het nog eens met andere antwoorden.
             </p>
           </section>`;
+      this.scrollDown();
       data.Objects.length - 1 > dataNumber
       ? (
         chat.nextHouse = dataNumber + 1,
@@ -228,7 +232,7 @@
           <p>Als de lader blijft staan, controleer dan uw connectie met het internet.</p>
         </section>`
       : null;
-      appSettings.chat.scrollTop = appSettings.chat.scrollHeight;
+      section.scrollDown();
     }
   };
 

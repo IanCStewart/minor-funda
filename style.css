@@ -222,6 +222,10 @@ main {
   max-width: 40rem;
 }
 
+#loading .avatar {
+  position: initial;
+}
+
 @-webkit-keyframes loading {
  0%, 100% {-webkit-transform: rotate(0);}
  40% {-webkit-transform: rotate(720deg);}

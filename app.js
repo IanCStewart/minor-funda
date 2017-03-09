@@ -108,11 +108,18 @@
             html = chat.questions[0];
             chat.questionCount = 1;
             chat.userChoices = [];
-            chat.houseCount = 0;
+            chat.nextHouse = 0;
             section.renderChatMessage(html, 'fundapi');
           } else if(response.toLowerCase() === 'nee') {
-            html = 'Toch nog wel het volgende huis bekijken?';
-            chat.questionCount = chat.questionCount - 1;
+            chat.hasNextHouse
+            ? (
+              html = 'Toch nog wel het volgende huis bekijken?',
+              chat.questionCount = chat.questionCount - 1
+            )
+            : (
+              html = 'Er zijn geen andere huizen. Wilt u het vorige huis opnieuw zien?',
+              chat.questionCount = chat.questionCount - 1
+            );
             section.renderChatMessage(html, 'fundapi');
           } else {
             html = chat.awnsers[chat.questionCount - 2];
@@ -121,8 +128,8 @@
           break;
         default:
           if(response.toLowerCase() === 'ja') {
-            chat.houseCount + 1;
-            section.renderLocationObjects(chat.houseCount);
+            chat.nextHouse + 1;
+            section.renderLocationObjects(chat.nextHouse);
           } else if(response.toLowerCase() === 'nee') {
             chat.questionCount = chat.questionCount + 1;
             html = 'Top als u een nieuwe zoek opdracht wilt doen stuur dan "ja"';
@@ -135,7 +142,8 @@
       }
     },
     questionCount: 0,
-    houseCount: 0,
+    nextHouse: 0,
+    hasNextHouse: true,
     questions: [
       'zoekt u een "koop" huis of een "huur" huis?',
       'Zoek u naar een "woonhuis" of een "appartement"?',
@@ -200,11 +208,13 @@
           </section>`;
       data.Objects.length - 1 > dataNumber
       ? (
-        chat.houseCount = dataNumber + 1,
+        chat.nextHouse = dataNumber + 1,
+        chat.hasNextHouse = true,
         this.renderChatMessage('Wilt u het volgende huis zien?', 'fundapi')
       )
       : (
         chat.questionCount = 6,
+        chat.hasNextHouse = false,
         this.renderChatMessage('Dit waren alle huizen in de zoek opdracht. Wilt u een nieuwe zoek opdracht beginnen?', 'fundapi')
       );
     },

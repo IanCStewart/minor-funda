@@ -1,4 +1,4 @@
-/*global window, document, config, fetch, navigator*/
+/*global window, document, config, fetch, navigator, localStorage*/
 (function(){
   'use strict';
 
@@ -103,14 +103,30 @@
             section.renderChatMessage(html, 'fundapi');
           }
           break;
-        case 5:
+        case 6:
           if(response.toLowerCase() === 'ja') {
             html = chat.questions[0];
-            chat.questionCount = 0;
+            chat.questionCount = 1;
             chat.userChoices = [];
+            chat.houseCount = 0;
             section.renderChatMessage(html, 'fundapi');
           } else if(response.toLowerCase() === 'nee') {
-            html = 'Oke top! Als je je nog bedenkt stuur dan even "ja" 😇';
+            html = 'Toch nog wel het volgende huis bekijken?';
+            chat.questionCount = chat.questionCount - 1;
+            section.renderChatMessage(html, 'fundapi');
+          } else {
+            html = chat.awnsers[chat.questionCount - 2];
+            section.renderChatMessage(html, 'fundapi');
+          }
+          break;
+        default:
+          if(response.toLowerCase() === 'ja') {
+            chat.houseCount + 1;
+            section.renderLocationObjects(chat.houseCount);
+          } else if(response.toLowerCase() === 'nee') {
+            chat.questionCount = chat.questionCount + 1;
+            html = 'Top als u een nieuwe zoek opdracht wilt doen stuur dan "ja"';
+            section.renderChatMessage(html, 'fundapi');
           } else {
             html = chat.awnsers[chat.questionCount - 1];
             section.renderChatMessage(html, 'fundapi');
@@ -119,6 +135,7 @@
       }
     },
     questionCount: 0,
+    houseCount: 0,
     questions: [
       'zoekt u een "koop" huis of een "huur" huis?',
       'Zoek u naar een "woonhuis" of een "appartement"?',
@@ -157,23 +174,21 @@
         </section>`;
       appSettings.chat.scrollTop = appSettings.chat.scrollHeight;
     },
-    renderLocationObjects(data) {
-      let html = '';
+    unrenderLoader() {
       appSettings.chat.removeChild(document.querySelector('#loading'));
+    },
+    renderLocationObjects(dataNumber) {
+      const data = JSON.parse(localStorage.getItem('fundaSearchResults'));
       data.Objects.length > 0
-      ? data.Objects.forEach(object => {
-        html = `
+      ? appSettings.chat.innerHTML += `
           <section class="message house">
             <div class="avatar"><img src="./assets/img/fundapi-avatar.svg" /></div>
-            <header><h1>${object.Adres}</h1></header>
+            <header><h1>${data.Objects[dataNumber].Adres}</h1></header>
             <p>
-              <img src="${object.FotoLarge}"/>
-              ${object.HuurprijsFormaat ? object.PrijsGeformatteerdTextHuur : object.PrijsGeformatteerdTextKoop}
+              <img src="${data.Objects[dataNumber].FotoLarge}"/>
+              ${data.Objects[dataNumber].HuurprijsFormaat ? data.Objects[dataNumber].PrijsGeformatteerdTextHuur : data.Objects[dataNumber].PrijsGeformatteerdTextKoop}
             </p>
-          </section>
-        `;
-        appSettings.chat.innerHTML += html;
-      })
+          </section>`
       : appSettings.chat.innerHTML += `
           <section class="message funda">
             <div class="avatar"><img src="./assets/img/fundapi-avatar.svg" /></div>
@@ -182,15 +197,16 @@
               Er zijn geen huizen die aan de volgende criteria voldoen. ${data.Metadata.Omschrijving}.
               Probeer het nog eens met andere antwoorden.
             </p>
-          </section>
-      `;
-      appSettings.chat.innerHTML += `
-        <section class="message funda">
-          <div class="avatar"><img src="./assets/img/fundapi-avatar.svg" /></div>
-          <header><h1>Fundapi</h1></header>
-          <p>Wilt u opnieuw beginnen?</p>
-        </section>`;
-      appSettings.chat.scrollTop = appSettings.chat.scrollHeight;
+          </section>`;
+      data.Objects.length - 1 > dataNumber
+      ? (
+        chat.houseCount = dataNumber + 1,
+        this.renderChatMessage('Wilt u het volgende huis zien?', 'fundapi')
+      )
+      : (
+        chat.questionCount = 6,
+        this.renderChatMessage('Dit waren alle huizen in de zoek opdracht. Wilt u een nieuwe zoek opdracht beginnen?', 'fundapi')
+      );
     },
     loading() {
       document.querySelector('#loading') === null
@@ -236,8 +252,24 @@
         if (address && chat.userChoices.options.length > 0) {
           let options = '/';
           chat.userChoices.options.forEach(option => options += `${option}/`);
+          localStorage.setItem(
+            'fundaSearchOptions',
+            JSON.stringify({
+              type: chat.userChoices.type,
+              address: address.replace(/ /g, '-'),
+              options: options
+            })
+          );
           resolve(request.data(appSettings.urlFundaSearch(chat.userChoices.type, address.replace(/ /g, '-'), options, '1', '25')));
         } else if (address && !chat.userChoices.options.length > 0) {
+          localStorage.setItem(
+            'fundaSearchOptions',
+            JSON.stringify({
+              type: chat.userChoices.type,
+              address: address.replace(/ /g, '-'),
+              options: ''
+            })
+          );
           resolve(request.data(appSettings.urlFundaSearch(chat.userChoices.type, address.replace(/ /g, '-'), '', '1', '25')));
         } else {
           reject();
@@ -251,8 +283,16 @@
       location.geo()
       .then(coords => location.addres(coords.lat, coords.long))
       .then(address => location.getObjects(address))
-      .then(data => section.renderLocationObjects(data))
+      .then(data => this.data(data))
+      .then(() => section.unrenderLoader())
+      .then(() => section.renderLocationObjects(0))
       .catch(section.loading());
+    },
+    data(data) {
+      new Promise(function(resolve, reject) {
+        localStorage.setItem('fundaSearchResults', JSON.stringify(data));
+        localStorage.getItem('fundaSearchResults') ? resolve() : reject();
+      });
     }
   };
 

@@ -34,8 +34,9 @@
     },
     awnserQuestion(response) {
       appSettings.chat.innerHTML += `
-        <section>
-          <header><h1>user</h1></header>
+        <section class="message user">
+          <div class="avatar"><img src="./assets/img/user-avatar.svg" /></div>
+          <header><h1>User</h1></header>
           <p>${response}</p>
         </section>
       `;
@@ -113,11 +114,13 @@
 
       this.questionCount <= 5
       ? appSettings.chat.innerHTML += `
-        <section>
+        <section class="message funda">
+          <div class="avatar"><img src="./assets/img/fundapi-avatar.svg" /></div>
           <header><h1>Fundapi</h1></header>
           <p>${html}</p>
         </section>`
       : null;
+      appSettings.chat.scrollTop = appSettings.chat.scrollHeight;
     },
     questionCount: 0,
     questions: [
@@ -155,7 +158,7 @@
       data.Objects.length > 0
       ? data.Objects.forEach(object => {
         html = `
-          <section>
+          <section class="message house">
             <h1>${object.Adres}</h1>
             <img src="${object.FotoLarge}"/>
             ${object.HuurprijsFormaat ? object.PrijsGeformatteerdTextHuur : object.PrijsGeformatteerdTextKoop}

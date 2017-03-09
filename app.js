@@ -29,18 +29,10 @@
     submit(event) {
       event.preventDefault();
       const input = document.querySelector('#chat-input');
-      chat.awnserQuestion(input.value);
+      input.value
+      ? (section.renderChatMessage(input.value.toString(), 'user'), chat.nextQuestion(input.value.toString()))
+      : null;
       input.value = '';
-    },
-    awnserQuestion(response) {
-      appSettings.chat.innerHTML += `
-        <section class="message user">
-          <div class="avatar"><img src="./assets/img/user-avatar.svg" /></div>
-          <header><h1>User</h1></header>
-          <p>${response}</p>
-        </section>
-      `;
-      this.nextQuestion(response);
     },
     nextQuestion(response) {
       let html;
@@ -51,14 +43,17 @@
           chat.questionCount = chat.questionCount + 1;
           chat.userChoices.type = '';
           chat.userChoices.options = [];
+          section.renderChatMessage(html, 'fundapi');
           break;
         case 1:
           if(response.toLowerCase() === 'koop' || response.toLowerCase() === 'huur') {
             html = chat.questions[chat.questionCount];
             chat.questionCount = chat.questionCount + 1;
             chat.userChoices.type = response.toLowerCase();
+            section.renderChatMessage(html, 'fundapi');
           } else {
             html = chat.awnsers[chat.questionCount - 1];
+            section.renderChatMessage(html, 'fundapi');
           }
           break;
         case 2:
@@ -66,11 +61,14 @@
             html = chat.questions[chat.questionCount];
             chat.questionCount = chat.questionCount + 1;
             chat.userChoices.options.push(response.toLowerCase());
+            section.renderChatMessage(html, 'fundapi');
           } else if(response.toLowerCase() === 'maakt niet uit') {
             html = chat.questions[chat.questionCount];
             chat.questionCount = chat.questionCount + 1;
+            section.renderChatMessage(html, 'fundapi');
           } else {
             html = chat.awnsers[chat.questionCount - 1];
+            section.renderChatMessage(html, 'fundapi');
           }
           break;
         case 3:
@@ -78,11 +76,14 @@
             html = chat.questions[chat.questionCount];
             chat.questionCount = chat.questionCount + 1;
             chat.userChoices.options.push(response.toLowerCase());
+            section.renderChatMessage(html, 'fundapi');
           } else if(response.toLowerCase() === 'maakt niet uit') {
             html = chat.questions[chat.questionCount];
             chat.questionCount = chat.questionCount + 1;
+            section.renderChatMessage(html, 'fundapi');
           } else {
             html = chat.awnsers[chat.questionCount - 1];
+            section.renderChatMessage(html, 'fundapi');
           }
           break;
         case 4:
@@ -90,13 +91,16 @@
             html = chat.questions[chat.questionCount];
             chat.questionCount = chat.questionCount + 1;
             chat.userChoices.options.push(response.toLowerCase());
+            section.renderChatMessage(html, 'fundapi');
             store.hydrate();
           } else if(response.toLowerCase() === 'maakt niet uit') {
             html = chat.questions[chat.questionCount];
             chat.questionCount = chat.questionCount + 1;
+            section.renderChatMessage(html, 'fundapi');
             store.hydrate();
           } else {
             html = chat.awnsers[chat.questionCount - 1];
+            section.renderChatMessage(html, 'fundapi');
           }
           break;
         case 5:
@@ -104,23 +108,15 @@
             html = chat.questions[0];
             chat.questionCount = 0;
             chat.userChoices = [];
+            section.renderChatMessage(html, 'fundapi');
           } else if(response.toLowerCase() === 'nee') {
             html = 'Oke top! Als je je nog bedenkt stuur dan even "ja" 😇';
           } else {
             html = chat.awnsers[chat.questionCount - 1];
+            section.renderChatMessage(html, 'fundapi');
           }
           break;
       }
-
-      this.questionCount <= 5
-      ? appSettings.chat.innerHTML += `
-        <section class="message funda">
-          <div class="avatar"><img src="./assets/img/fundapi-avatar.svg" /></div>
-          <header><h1>Fundapi</h1></header>
-          <p>${html}</p>
-        </section>`
-      : null;
-      appSettings.chat.scrollTop = appSettings.chat.scrollHeight;
     },
     questionCount: 0,
     questions: [
@@ -152,6 +148,15 @@
         : document.querySelector(page).classList.add('invisible');
       });
     },
+    renderChatMessage(html, user) {
+      appSettings.chat.innerHTML += `
+        <section class="message ${user}">
+          <div class="avatar"><img src="./assets/img/${user}-avatar.svg" /></div>
+          <header><h1>${user}</h1></header>
+          <p>${html}</p>
+        </section>`;
+      appSettings.chat.scrollTop = appSettings.chat.scrollHeight;
+    },
     renderLocationObjects(data) {
       let html = '';
       appSettings.chat.removeChild(document.querySelector('#loading'));
@@ -159,25 +164,45 @@
       ? data.Objects.forEach(object => {
         html = `
           <section class="message house">
-            <h1>${object.Adres}</h1>
-            <img src="${object.FotoLarge}"/>
-            ${object.HuurprijsFormaat ? object.PrijsGeformatteerdTextHuur : object.PrijsGeformatteerdTextKoop}
+            <div class="avatar"><img src="./assets/img/fundapi-avatar.svg" /></div>
+            <header><h1>${object.Adres}</h1></header>
+            <p>
+              <img src="${object.FotoLarge}"/>
+              ${object.HuurprijsFormaat ? object.PrijsGeformatteerdTextHuur : object.PrijsGeformatteerdTextKoop}
+            </p>
           </section>
         `;
         appSettings.chat.innerHTML += html;
       })
       : appSettings.chat.innerHTML += `
-        <p>Theres no houses in this area "${data.Metadata.Omschrijving}"</p>
+          <section class="message funda">
+            <div class="avatar"><img src="./assets/img/fundapi-avatar.svg" /></div>
+            <header><h1>API</h1></header>
+            <p>
+              Er zijn geen huizen die aan de volgende criteria voldoen. ${data.Metadata.Omschrijving}.
+              Probeer het nog eens met andere antwoorden.
+            </p>
+          </section>
       `;
-      appSettings.chat.innerHTML += 'Wilt u opnieuw beginnen?';
+      appSettings.chat.innerHTML += `
+        <section class="message funda">
+          <div class="avatar"><img src="./assets/img/fundapi-avatar.svg" /></div>
+          <header><h1>Fundapi</h1></header>
+          <p>Wilt u opnieuw beginnen?</p>
+        </section>`;
+      appSettings.chat.scrollTop = appSettings.chat.scrollHeight;
     },
     loading() {
       document.querySelector('#loading') === null
       ? appSettings.chat.innerHTML += `
         <section id="loading">
-          <div />
+          <div class="avatar"><img src="./assets/img/fundapi-avatar.svg" /></div>
+          <h1>Een moment we zijn aan het laden...</h1>
+          <div></div>
+          <p>Als de lader blijft staan, controleer dan uw connectie met het internet.</p>
         </section>`
       : null;
+      appSettings.chat.scrollTop = appSettings.chat.scrollHeight;
     }
   };
 

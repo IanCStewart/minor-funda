@@ -3,7 +3,7 @@
   'use strict';
 
   const appSettings = {
-    urlFundaSearch(type, query, page, size) {return `http://funda.kyrandia.nl/feeds/Aanbod.svc/json/${config.FUNDA_KEY}/?type=${type}&zo=/${query}/&page=${page}&pagesize=${size}`;},
+    urlFundaSearch(type, address, options, page, size) {return `http://funda.kyrandia.nl/feeds/Aanbod.svc/json/${config.FUNDA_KEY}/?type=${type}&zo=/${address}/+0.001km${options}/&page=${page}&pagesize=${size}`;},
     urlGetAddress(lat, long) {return `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}&key=${config.GOOGLE_KEY}&result_type=street_address|locality`;},
     chat: document.querySelector('#chat-body'),
     error: document.querySelector('.error')
@@ -201,9 +201,15 @@
       }
 
       return new Promise(function(resolve, reject) {
-        address
-        ? resolve(request.data(appSettings.urlFundaSearch('koop', address.replace(/ /g, '-'), '1', '25')))
-        : reject();
+        if (address && chat.userChoices.options.length > 0) {
+          let options = '/';
+          chat.userChoices.options.forEach(option => options += `${option}/`);
+          resolve(request.data(appSettings.urlFundaSearch(chat.userChoices.type, address.replace(/ /g, '-'), options, '1', '25')));
+        } else if (address && !chat.userChoices.options.length > 0) {
+          resolve(request.data(appSettings.urlFundaSearch(chat.userChoices.type, address.replace(/ /g, '-'), '1', '25')));
+        } else {
+          reject();
+        }
       });
     }
   };

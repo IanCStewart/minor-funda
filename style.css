@@ -1,7 +1,9 @@
 :root {
   --color-orange: #F7A100;
   --color-light-blue: #E6F2F7;
-  --color-blue: #0071B3;
+  --color-blue: #60C5F8;
+  --color-dark-blue: #0071B3;
+  --color-brown: #53241B;
   --color-white: #FFFFFF;
   --color-grey: #999999;
   --color-black: #333333;
@@ -15,6 +17,12 @@
 html {
   font-size: 62.5%;
   font-family: "proxima-nova";
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  width: 100vw;
 }
 
 header {
@@ -25,4 +33,214 @@ header {
 
 header img {
   height: 3.5rem;
+}
+
+main {
+  height: calc(100% - 5.5rem);
+  width: 100%;
+}
+
+#chat {
+  height: 100%;
+  width: 100%;
+  background: url('./assets/img/chat-background.jpg');
+  background-size: cover;
+  background-position: center;
+  font-size: var(--text-body);
+  position: relative;
+}
+
+#chat #chat-body {
+  width: 100%;
+  padding: 1.6rem;
+  box-sizing: border-box;
+  overflow-y: scroll;
+  max-height: calc(100% - 4.8rem);
+  position: absolute;
+  bottom: 4.8rem;
+  left: 0;
+}
+
+#chat footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+#chat footer form {
+  width: 100%;
+  height: 4.8rem;
+  position: relative;
+}
+
+#chat footer input[type="text"] {
+  width: 100%;
+  height: 100%;
+  padding: 1.6rem;
+  padding-right: 6rem;
+  box-sizing: border-box;
+  border: none;
+  font-size: inherit;
+  line-height: var(--text-body);
+}
+
+#chat footer input[type="submit"] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 1.6rem;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: none;
+  color: var(--color-dark-blue);
+  border: none;
+  font-size: inherit;
+  line-height: var(--text-body);
+}
+
+#chat .message {
+  display: flex;
+  flex-wrap: wrap;
+  color: var(--color-white);
+  margin-bottom: 1rem;
+  position: relative;
+  padding-left: 8rem;
+}
+
+#chat .avatar {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.avatar img {
+  width: 6rem;
+  height: 6rem;
+}
+
+#chat header {
+  width: 100%;
+  font-weight: bold;
+  background: none;
+  padding: 0;
+  padding-bottom: 1rem;
+  color: var(--color-black);
+}
+
+#chat .message p {
+  max-width: 80%;
+  padding: 1rem;
+  background: var(--color-blue);
+  border-radius: .5rem;
+}
+
+#chat .message.user {
+  padding-left: initial;
+  padding-right: 8rem;
+  flex-direction: row-reverse;
+}
+
+#chat .message.user .avatar {
+  left: initial;
+  right: 0;
+}
+
+#chat .message.user header {
+  text-align: right;
+}
+
+#chat .message.user p {
+  background: var(--color-brown);
+}
+
+#chat .message.house p {
+  display: flex;
+  flex-direction: column;
+}
+
+#chat .message.house p img {
+  max-width: 100%;
+  max-height: 20rem;
+  margin-bottom: 1rem;
+}
+
+#chat .price,
+#chat .price-ext {
+  font-weight: bold;
+}
+
+#chat .price-info {
+  font-size: var(--text-xs);
+  opacity: .85;
+  padding-left: .5rem;
+}
+
+#loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 80%;
+  min-width: 20rem;
+  color: var(--color-white);
+  background: var(--color-dark-blue);
+  padding: 3rem 1rem;
+  box-sizing: border-box;
+  font-size: var(--text-body);
+  margin: 0 auto;
+  text-align: center;
+}
+
+#loading .avatar img {
+  max-width: 80%;
+  min-width: 150px;
+}
+
+#loading h1 {
+  font-size: var(--text-medium);
+  font-weight: bold;
+  max-width: 80%;
+}
+
+#loading div:not(.avatar) {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 2rem 0;
+  border: .5rem solid var(--color-light-blue);
+  border-radius: 50%;
+  border-bottom: .5rem solid var(--color-orange);
+  animation: loading 5s infinite;
+  -webkit-animation: loading 5s infinite alternate;
+  -moz-animation: loading 5s infinite alternate;
+  -o-animation: loading 5s infinite alternate;
+  opacity: .75;
+}
+
+#loading p {
+  max-width: 40rem;
+}
+
+#loading .avatar {
+  position: initial;
+}
+
+@-webkit-keyframes loading {
+ 0%, 100% {-webkit-transform: rotate(0);}
+ 40% {-webkit-transform: rotate(720deg);}
+}
+
+@-moz-keyframes loading {
+ 0%, 100% {-moz-transform: rotate(0);}
+ 40% {-moz-transform: rotate(720deg);}
+}
+
+@-o-keyframes loading {
+ 0%, 100% {-o-transform: rotate(0);}
+ 40% {-o-transform: rotate(720deg);}
+}
+@keyframes loading {
+ 0%, 100% {transform: rotate(0);}
+ 40% {transform: rotate(720deg);}
 }

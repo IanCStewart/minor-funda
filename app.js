@@ -16,14 +16,14 @@
 
   const routes = {
     listen() {
-      chat.listen();
+      store.checkLocalStorage();
       window.addEventListener('hashchange', () => section.toggle(window.location.hash), false);
     }
   };
 
   const chat = {
     listen() {
-      this.nextQuestion();
+      chat.questionCount != 5 ? this.nextQuestion() : null;
       document.querySelector('#chat-form').addEventListener('submit', this.submit, false);
     },
     submit(event) {
@@ -307,6 +307,17 @@
         localStorage.setItem('fundaSearchResults', JSON.stringify(data));
         localStorage.getItem('fundaSearchResults') ? resolve() : reject();
       });
+    },
+    checkLocalStorage() {
+      const data = JSON.parse(localStorage.getItem('fundaSearchResults'));
+      data
+      ? (
+        chat.questionCount = 5,
+        chat.listen(),
+        section.renderChatMessage('Zo te zien had je al naar huizen gekeken. Hier is het eerste huis van de laatste set.', 'fundapi'),
+        section.renderLocationObjects(chat.nextHouse)
+      )
+      : chat.listen();
     }
   };
 

@@ -52,7 +52,7 @@
             this.userChoices.type = response.toLowerCase();
             section.renderChatMessage(html, 'fundapi');
           } else {
-            html = this.awnsers[this.questionCount - 1];
+            html = this.answers[this.questionCount - 1];
             section.renderChatMessage(html, 'fundapi');
           }
           break;
@@ -67,7 +67,7 @@
             this.questionCount = this.questionCount + 1;
             section.renderChatMessage(html, 'fundapi');
           } else {
-            html = this.awnsers[this.questionCount - 1];
+            html = this.answers[this.questionCount - 1];
             section.renderChatMessage(html, 'fundapi');
           }
           break;
@@ -82,7 +82,7 @@
             this.questionCount = this.questionCount + 1;
             section.renderChatMessage(html, 'fundapi');
           } else {
-            html = this.awnsers[this.questionCount - 1];
+            html = this.answers[this.questionCount - 1];
             section.renderChatMessage(html, 'fundapi');
           }
           break;
@@ -99,7 +99,7 @@
             section.renderChatMessage(html, 'fundapi');
             store.hydrate();
           } else {
-            html = this.awnsers[this.questionCount - 1];
+            html = this.answers[this.questionCount - 1];
             section.renderChatMessage(html, 'fundapi');
           }
           break;
@@ -122,7 +122,7 @@
             );
             section.renderChatMessage(html, 'fundapi');
           } else {
-            html = this.awnsers[this.questionCount - 2];
+            html = this.answers[this.questionCount - 2];
             section.renderChatMessage(html, 'fundapi');
           }
           break;
@@ -135,7 +135,7 @@
             html = 'Top als u een nieuwe zoek opdracht wilt doen stuur dan "ja"';
             section.renderChatMessage(html, 'fundapi');
           } else {
-            html = this.awnsers[this.questionCount - 1];
+            html = this.answers[this.questionCount - 1];
             section.renderChatMessage(html, 'fundapi');
           }
           break;
@@ -151,7 +151,7 @@
       '"Nieuwbouw" of "Bestaande bouw"?',
       'Ik ga de huizen ophalen die voldoen aan u criteria'
     ],
-    awnsers: [
+    answers: [
       'Ik snap niet wat je bedoeld, antwoord met "koop" of "huur".',
       'Ik snap niet wat je bedoeld, antwoord met "woonhuis", "appartament" of "maakt niet uit".',
       'Ik snap niet wat je bedoeld, antwoord met "balkon", "dakterras", "tuin" of "maakt niet uit".',

@@ -33,7 +33,7 @@ App will run on `localhost:3000` if available, else it will choose another port.
 By browsing to the index.html file u can start using the app. The user will see a chat and be promoted with the first question. By answering questions the app makes a search based on your answer and returns the houses that match your location and answers. By continuing the conversation the user can see through all the found houses.
 
 ## Resources
-- [Funda API](www.funda.nl)
+- [Funda API](http://www.funda.nl/)
 - [Mozilla Developer Network](https://developer.mozilla.org/)
 
 ## Wishlist

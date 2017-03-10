@@ -5,9 +5,24 @@
   --color-white: #FFFFFF;
   --color-grey: #999999;
   --color-black: #333333;
+  --text-large: calc(var(--text-body) * 2.25);
+  --text-medium: calc(var(--text-body) * 1.75);
+  --text-small: calc(var(--text-body) * 1.375);
+  --text-body: 1.6rem;
+  --text-xs: 1.2rem;
 }
 
 html {
   font-size: 62.5%;
   font-family: "proxima-nova";
+}
+
+header {
+  background: var(--color-orange);
+  padding: 1rem;
+  color: var(--color-white);
+}
+
+header img {
+  height: 3.5rem;
 }
